@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewSetting xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <columnSettings>
+    <ColumnSetting name="name">
+      <width>367</width>
+      <mergedColumns />
+    </ColumnSetting>
+    <ColumnSetting name="timestamp (UTC)">
+      <width>219</width>
+      <mergedColumns />
+    </ColumnSetting>
+    <ColumnSetting name="database_id">
+      <width>100</width>
+      <mergedColumns />
+    </ColumnSetting>
+    <ColumnSetting name="message">
+      <width>100</width>
+      <mergedColumns />
+    </ColumnSetting>
+    <ColumnSetting name="data">
+      <width>447</width>
+      <mergedColumns />
+    </ColumnSetting>
+    <ColumnSetting name="component">
+      <width>226</width>
+      <mergedColumns />
+    </ColumnSetting>
+  </columnSettings>
+  <filterExp xsi:type="FilterLogicalExpression">
+    <LogicalOperator>And</LogicalOperator>
+    <LeftOperand xsi:type="FilterBinaryExpression">
+      <BinaryOperator>EQ</BinaryOperator>
+      <Column>component</Column>
+      <Value>QUERY_PROCESSING</Value>
+    </LeftOperand>
+    <RightOperand xsi:type="FilterBinaryExpression">
+      <BinaryOperator>EQ</BinaryOperator>
+      <Column>name</Column>
+      <Value>sp_server_diagnostics_component_result</Value>
+    </RightOperand>
+  </filterExp>
+</ViewSetting>
