@@ -1,0 +1,44 @@
+ -- read-only routing list for each replica when acting as primary replica
+ ----https://www.sqlshack.com/how-to-configure-read-only-routing-for-an-availability-group-in-sql-server-2016/
+
+ALTER AVAILABILITY GROUP [AG11111]
+MODIFY REPLICA ON
+N' Node A' WITH -- Node A
+(SECONDARY_ROLE (ALLOW_CONNECTIONS = READ_ONLY));
+
+ALTER AVAILABILITY GROUP [AG11111]
+MODIFY REPLICA ON
+N' Node A' WITH 
+(SECONDARY_ROLE (READ_ONLY_ROUTING_URL = N'TCP:// Node A.mydomain.com:1433'));
+
+ALTER AVAILABILITY GROUP [AG11111]
+MODIFY REPLICA ON
+N' Node B' WITH
+(SECONDARY_ROLE (ALLOW_CONNECTIONS = READ_ONLY));
+
+ALTER AVAILABILITY GROUP [AG11111]
+MODIFY REPLICA ON
+N' Node B' WITH
+(SECONDARY_ROLE (READ_ONLY_ROUTING_URL = N'TCP:// Node B.mydomain.com:1433'));
+
+ALTER AVAILABILITY GROUP [AG11111]
+MODIFY REPLICA ON
+N' Node C' WITH
+(SECONDARY_ROLE (ALLOW_CONNECTIONS = READ_ONLY));
+
+ALTER AVAILABILITY GROUP [AG11111]
+MODIFY REPLICA ON
+N' Node C' WITH
+(SECONDARY_ROLE (READ_ONLY_ROUTING_URL = N'TCP:// Node C.mydomain.com:1433'));
+
+----###########################################################################################################
+
+ALTER AVAILABILITY GROUP [AG11111]
+MODIFY REPLICA ON
+N' Node A' WITH
+( PRIMARY_ROLE (READ_ONLY_ROUTING_LIST=(' Node B','Node C')));
+
+ALTER AVAILABILITY GROUP [AG11111]
+MODIFY REPLICA ON
+N' Node B' WITH
+( PRIMARY_ROLE (READ_ONLY_ROUTING_LIST=(' Node A','Node C')));
