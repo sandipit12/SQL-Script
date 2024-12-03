@@ -1,0 +1,1 @@
+Get-Clusterlog -Destination "D:\ClusetLog"
