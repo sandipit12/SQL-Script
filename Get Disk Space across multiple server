@@ -1,0 +1,35 @@
+
+
+
+
+$Query = "SELECT @@servername ,
+Drive
+    ,   TotalSpaceGB
+    ,   FreeSpaceGB
+    ,   PctFree
+    --,   PctFreeExact
+    FROM
+    (SELECT DISTINCT
+        SUBSTRING(dovs.volume_mount_point, 1, 10) AS Drive
+    ,   CONVERT(INT, dovs.total_bytes / 1024.0 / 1024.0 / 1024.0) AS TotalSpaceGB
+    ,   CONVERT(INT, dovs.available_bytes / 1048576.0) / 1024 AS FreeSpaceGB
+    ,   CAST(ROUND(( CONVERT(FLOAT, dovs.available_bytes / 1048576.0) / CONVERT(FLOAT, dovs.total_bytes / 1024.0 /
+                         1024.0) * 100 ), 2) AS NVARCHAR(50)) + '%' AS PctFree
+   -- ,   CONVERT(FLOAT, dovs.available_bytes / 1048576.0) / CONVERT(FLOAT, dovs.total_bytes / 1024.0 / 1024.0) * 100 AS PctFreeExact                
+    FROM    sys.master_files AS mf
+    CROSS APPLY sys.dm_os_volume_stats(mf.database_id, mf.file_id) AS dovs) AS DE
+    where drive like 'T%'
+    "
+
+
+
+#[string []] $computers =  @('dc1prdsqlwv11','dc1prdsqlwv10','dc2prdsqlwv10','dc2prdsqlwv11')
+[string []] $computers =  @('dc1prdsqlwv99','dc1prdsqlwv06','dc2prdsqlwv05','dc2prdsqlwv06')
+
+
+
+foreach ($instance in $computers)
+{
+$instance1 = $instance
+Invoke-Sqlcmd -Query $Query -ServerInstance $instance1 |FORMAT-TABLE 
+}
