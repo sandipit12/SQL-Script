@@ -1,0 +1,10 @@
+
+
+ $computers =  @('dc1prdsqlwv05','dc1prdsqlwv06','dc2prdsqlwv05','dc2prdsqlwv06')
+
+
+#get All drive
+#Get-WmiObject -Class Win32_LogicalDisk -ComputerName $computers | ? {$_. DriveType -eq 3} | select PSComputerName ,DeviceID, {[int]($_.Size /1GB)},{[INT] ($_.FreeSpace /1GB)}
+
+#Get Specfic drive
+Get-WmiObject -Class Win32_LogicalDisk -ComputerName  $computers -Filter "DeviceID='Z:'" | ? {$_. DriveType -eq 3} | select PSComputerName, DeviceID, {[int]($_.Size /1GB)}, {[int]($_.FreeSpace /1GB)}
